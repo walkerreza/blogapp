@@ -1,10 +1,65 @@
 <?php
 session_start();
-include 'config/database.php';
-include 'includes/functions.php';
 
-// Ambil artikel terbaru
-$articles = getLatestArticles($conn, 5);
+// Data statis untuk artikel terbaru
+$articles = [
+    [
+        'id' => 1,
+        'title' => 'Cara Membuat Website dengan HTML dan CSS',
+        'content' => 'HTML dan CSS adalah fondasi dasar untuk membuat website. Dalam artikel ini, kita akan membahas langkah-langkah dasar untuk membuat website sederhana menggunakan HTML dan CSS...',
+        'image' => 'assets/img/article1.jpg',
+        'category' => 'Teknologi',
+        'author' => 'John Doe',
+        'created_at' => '2025-05-10 10:00:00',
+        'views' => 120
+    ],
+    [
+        'id' => 2,
+        'title' => 'Tips Fotografi untuk Pemula',
+        'content' => 'Fotografi adalah seni menangkap momen. Bagi pemula, memahami dasar-dasar fotografi sangat penting untuk menghasilkan foto yang bagus...',
+        'image' => 'assets/img/article2.jpg',
+        'category' => 'Seni',
+        'author' => 'Jane Smith',
+        'created_at' => '2025-05-08 14:30:00',
+        'views' => 85
+    ],
+    [
+        'id' => 3,
+        'title' => 'Resep Masakan Tradisional Indonesia',
+        'content' => 'Indonesia memiliki kekayaan kuliner yang luar biasa. Mari kita jelajahi beberapa resep masakan tradisional yang mudah dibuat di rumah...',
+        'image' => 'assets/img/article3.jpg',
+        'category' => 'Kuliner',
+        'author' => 'Budi Santoso',
+        'created_at' => '2025-05-05 09:15:00',
+        'views' => 200
+    ],
+    [
+        'id' => 4,
+        'title' => 'Destinasi Wisata Tersembunyi di Indonesia',
+        'content' => 'Indonesia memiliki banyak tempat wisata yang belum banyak dikenal. Artikel ini akan membahas beberapa destinasi tersembunyi yang wajib dikunjungi...',
+        'image' => 'assets/img/article4.jpg',
+        'category' => 'Travel',
+        'author' => 'Siti Nuraini',
+        'created_at' => '2025-05-03 16:45:00',
+        'views' => 150
+    ],
+    [
+        'id' => 5,
+        'title' => 'Tren Teknologi 2025 yang Perlu Diketahui',
+        'content' => 'Teknologi terus berkembang dengan cepat. Berikut adalah beberapa tren teknologi terbaru di tahun 2025 yang perlu Anda ketahui...',
+        'image' => 'assets/img/article5.jpg',
+        'category' => 'Teknologi',
+        'author' => 'Ahmad Rizki',
+        'created_at' => '2025-05-01 11:20:00',
+        'views' => 175
+    ]
+];
+
+// Fungsi untuk format tanggal
+function formatDate($date) {
+    $timestamp = strtotime($date);
+    return date('d F Y', $timestamp);
+}
 ?>
 
 <!DOCTYPE html>

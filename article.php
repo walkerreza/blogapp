@@ -1,64 +1,206 @@
 <?php
 session_start();
-include 'config/database.php';
-include 'includes/functions.php';
+
+// Fungsi untuk format tanggal
+function formatDate($date) {
+    $timestamp = strtotime($date);
+    return date('d F Y', $timestamp);
+}
+
+// Data statis artikel
+$articles = [
+    1 => [
+        'id' => 1,
+        'title' => 'Cara Membuat Website dengan HTML dan CSS',
+        'content' => '<p>HTML dan CSS adalah fondasi dasar untuk membuat website. Dalam artikel ini, kita akan membahas langkah-langkah dasar untuk membuat website sederhana menggunakan HTML dan CSS.</p>
+
+<h2>Persiapan</h2>
+<p>Sebelum mulai, pastikan Anda memiliki text editor seperti Visual Studio Code, Sublime Text, atau Notepad++. Tools ini akan membantu Anda menulis kode dengan lebih mudah.</p>
+
+<h2>Struktur Dasar HTML</h2>
+<p>Berikut adalah struktur dasar HTML yang perlu Anda ketahui:</p>
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Judul Website&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+    &lt;p&gt;Ini adalah paragraf pertama saya.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2>Dasar CSS</h2>
+<p>CSS digunakan untuk memberikan style pada HTML. Berikut contoh CSS sederhana:</p>
+<pre>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+}
+
+p {
+    line-height: 1.6;
+}
+</pre>
+
+<p>Dengan menguasai dasar HTML dan CSS, Anda sudah bisa membuat website sederhana. Untuk pengembangan lebih lanjut, Anda bisa mempelajari JavaScript untuk menambahkan interaktivitas pada website Anda.</p>',
+        'image' => 'assets/img/article1.jpg',
+        'category' => 'Teknologi',
+        'category_id' => 1,
+        'author' => 'John Doe',
+        'created_at' => '2025-05-10 10:00:00',
+        'views' => 120,
+        'tags' => 'html,css,web development'
+    ],
+    2 => [
+        'id' => 2,
+        'title' => 'Tips Fotografi untuk Pemula',
+        'content' => '<p>Fotografi adalah seni menangkap momen. Bagi pemula, memahami dasar-dasar fotografi sangat penting untuk menghasilkan foto yang bagus.</p><p>Artikel lengkap tentang tips fotografi untuk pemula.</p>',
+        'image' => 'assets/img/article2.jpg',
+        'category' => 'Seni',
+        'category_id' => 2,
+        'author' => 'Jane Smith',
+        'created_at' => '2025-05-08 14:30:00',
+        'views' => 85,
+        'tags' => 'fotografi,tips,pemula'
+    ],
+    3 => [
+        'id' => 3,
+        'title' => 'Resep Masakan Tradisional Indonesia',
+        'content' => '<p>Indonesia memiliki kekayaan kuliner yang luar biasa. Mari kita jelajahi beberapa resep masakan tradisional yang mudah dibuat di rumah.</p><p>Artikel lengkap tentang resep masakan tradisional Indonesia.</p>',
+        'image' => 'assets/img/article3.jpg',
+        'category' => 'Kuliner',
+        'category_id' => 3,
+        'author' => 'Budi Santoso',
+        'created_at' => '2025-05-05 09:15:00',
+        'views' => 200,
+        'tags' => 'kuliner,resep,masakan indonesia'
+    ],
+    4 => [
+        'id' => 4,
+        'title' => 'Destinasi Wisata Tersembunyi di Indonesia',
+        'content' => '<p>Indonesia memiliki banyak tempat wisata yang belum banyak dikenal. Artikel ini akan membahas beberapa destinasi tersembunyi yang wajib dikunjungi.</p><p>Artikel lengkap tentang destinasi wisata tersembunyi di Indonesia.</p>',
+        'image' => 'assets/img/article4.jpg',
+        'category' => 'Travel',
+        'category_id' => 4,
+        'author' => 'Siti Nuraini',
+        'created_at' => '2025-05-03 16:45:00',
+        'views' => 150,
+        'tags' => 'travel,wisata,indonesia'
+    ],
+    5 => [
+        'id' => 5,
+        'title' => 'Tren Teknologi 2025 yang Perlu Diketahui',
+        'content' => '<p>Teknologi terus berkembang dengan cepat. Berikut adalah beberapa tren teknologi terbaru di tahun 2025 yang perlu Anda ketahui.</p><p>Artikel lengkap tentang tren teknologi 2025.</p>',
+        'image' => 'assets/img/article5.jpg',
+        'category' => 'Teknologi',
+        'category_id' => 1,
+        'author' => 'Ahmad Rizki',
+        'created_at' => '2025-05-01 11:20:00',
+        'views' => 175,
+        'tags' => 'teknologi,tren,2025'
+    ]
+];
+
+// Data statis komentar
+$all_comments = [
+    1 => [
+        [
+            'id' => 1,
+            'username' => 'user123',
+            'content' => 'Artikel yang sangat bermanfaat! Terima kasih atas informasinya.',
+            'created_at' => '2025-05-12 08:30:00'
+        ],
+        [
+            'id' => 2,
+            'username' => 'webdev',
+            'content' => 'Saya sudah mencoba tips ini dan hasilnya luar biasa. Sangat direkomendasikan!',
+            'created_at' => '2025-05-13 14:15:00'
+        ]
+    ],
+    2 => [
+        [
+            'id' => 3,
+            'username' => 'photogeek',
+            'content' => 'Tips yang bagus untuk pemula seperti saya. Akan saya coba tekniknya.',
+            'created_at' => '2025-05-10 09:45:00'
+        ]
+    ],
+    3 => [
+        [
+            'id' => 4,
+            'username' => 'foodlover',
+            'content' => 'Resepnya mudah diikuti dan hasilnya enak. Keluarga saya sangat menyukainya!',
+            'created_at' => '2025-05-07 18:20:00'
+        ],
+        [
+            'id' => 5,
+            'username' => 'chef_amatir',
+            'content' => 'Saya menambahkan sedikit variasi pada resepnya dan rasanya jadi lebih enak. Terima kasih atas inspirasinya!',
+            'created_at' => '2025-05-08 11:10:00'
+        ]
+    ],
+    4 => [],
+    5 => [
+        [
+            'id' => 6,
+            'username' => 'tech_enthusiast',
+            'content' => 'Sangat menarik melihat perkembangan teknologi yang begitu cepat. Saya tidak sabar melihat apa yang akan datang selanjutnya.',
+            'created_at' => '2025-05-02 16:30:00'
+        ]
+    ]
+];
 
 // Ambil ID artikel dari URL
 $article_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 // Jika ID tidak valid, redirect ke halaman utama
-if ($article_id <= 0) {
-    redirect('index.php');
+if ($article_id <= 0 || !isset($articles[$article_id])) {
+    header('Location: index.php');
+    exit;
 }
 
 // Ambil data artikel
-$article = getArticleById($conn, $article_id);
+$article = $articles[$article_id];
 
-// Jika artikel tidak ditemukan, redirect ke halaman utama
-if (!$article) {
-    redirect('index.php');
+// Ambil artikel terkait (artikel dengan kategori yang sama)
+$related_articles = [];
+foreach ($articles as $related) {
+    if ($related['category_id'] == $article['category_id'] && $related['id'] != $article_id) {
+        $related_articles[] = $related;
+        if (count($related_articles) >= 3) break; // Maksimal 3 artikel terkait
+    }
 }
-
-// Ambil artikel terkait
-$related_articles = getRelatedArticles($conn, $article['category_id'], $article_id, 3);
 
 // Proses komentar jika ada
 $comment_message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
-    if (!isLoggedIn()) {
-        redirect('login.php');
+    if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+        header('Location: login.php');
+        exit;
     }
     
-    $comment = sanitizeInput($_POST['comment']);
+    $comment = trim($_POST['comment']);
     
     if (!empty($comment)) {
-        try {
-            $query = "INSERT INTO comments (article_id, user_id, content, created_at) 
-                     VALUES (:article_id, :user_id, :content, NOW())";
-            
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
-            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':content', $comment);
-            
-            if ($stmt->execute()) {
-                $comment_message = 'Komentar berhasil ditambahkan';
-            } else {
-                $comment_message = 'Gagal menambahkan komentar';
-            }
-        } catch(PDOException $e) {
-            $comment_message = 'Terjadi kesalahan: ' . $e->getMessage();
-        }
+        // Simulasi penambahan komentar berhasil
+        $comment_message = 'Komentar berhasil ditambahkan';
     } else {
         $comment_message = 'Komentar tidak boleh kosong';
     }
 }
 
 // Ambil komentar untuk artikel ini
-$comments = getCommentsByArticleId($conn, $article_id);
-
-// Tambah jumlah view
-updateArticleViews($conn, $article_id);
+$comments = isset($all_comments[$article_id]) ? $all_comments[$article_id] : [];
 ?>
 
 <!DOCTYPE html>

@@ -16,6 +16,9 @@ if (ini_get("session.use_cookies")) {
 // Hancurkan session
 session_destroy();
 
+// Set pesan sukses logout
+$_SESSION['success_message'] = 'Anda berhasil logout.';
+
 // Redirect ke halaman utama
 header("Location: index.php");
 exit;

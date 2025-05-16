@@ -1,11 +1,10 @@
 <?php
 session_start();
-include 'config/database.php';
-include 'includes/functions.php';
 
 // Cek apakah pengguna sudah login
-if (isset($_SESSION['user_id'])) {
-    redirect('index.php');
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header('Location: index.php');
+    exit;
 }
 
 $errors = [];
@@ -13,15 +12,15 @@ $username = '';
 $email = '';
 $name = '';
 
-// Proses form registrasi
+// Proses form registrasi (hanya simulasi)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitizeInput($_POST['username']);
-    $email = sanitizeInput($_POST['email']);
-    $name = sanitizeInput($_POST['name']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $name = trim($_POST['name']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     
-    // Validasi input
+    // Validasi input sederhana
     if (empty($username)) {
         $errors[] = 'Username wajib diisi';
     } elseif (strlen($username) < 3) {
@@ -48,49 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Konfirmasi password tidak cocok';
     }
     
-    // Cek apakah username atau email sudah digunakan
+    // Jika tidak ada error, simulasi registrasi berhasil
     if (empty($errors)) {
-        try {
-            $query = "SELECT COUNT(*) FROM users WHERE username = :username OR email = :email";
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            
-            if ($stmt->fetchColumn() > 0) {
-                $errors[] = 'Username atau email sudah digunakan';
-            }
-        } catch(PDOException $e) {
-            $errors[] = 'Terjadi kesalahan: ' . $e->getMessage();
-        }
-    }
-    
-    // Jika tidak ada error, proses registrasi
-    if (empty($errors)) {
-        try {
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $role = 'user'; // Default role untuk pengguna baru
-            
-            $query = "INSERT INTO users (username, email, name, password, role, created_at) 
-                     VALUES (:username, :email, :name, :password, :role, NOW())";
-            
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':name', $name);
-            $stmt->bindParam(':password', $hashed_password);
-            $stmt->bindParam(':role', $role);
-            
-            if ($stmt->execute()) {
-                // Registrasi berhasil, redirect ke halaman login
-                $_SESSION['success_message'] = 'Registrasi berhasil! Silakan login dengan akun Anda.';
-                redirect('login.php');
-            } else {
-                $errors[] = 'Gagal mendaftarkan akun. Silakan coba lagi.';
-            }
-        } catch(PDOException $e) {
-            $errors[] = 'Terjadi kesalahan: ' . $e->getMessage();
-        }
+        // Untuk demo, kita anggap registrasi selalu berhasil
+        $_SESSION['success_message'] = 'Registrasi berhasil! Silakan login dengan akun Anda.';
+        header('Location: login.php');
+        exit;
     }
 }
 ?>

@@ -1,22 +1,21 @@
 <?php
 session_start();
-include 'config/database.php';
-include 'includes/functions.php';
 
 // Cek apakah pengguna sudah login
-if (isset($_SESSION['user_id'])) {
-    redirect('index.php');
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header('Location: index.php');
+    exit;
 }
 
 $errors = [];
 $username = '';
 
-// Proses form login
+// Proses form login (hanya simulasi)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitizeInput($_POST['username']);
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
     
-    // Validasi input
+    // Validasi input sederhana
     if (empty($username)) {
         $errors[] = 'Username wajib diisi';
     }
@@ -25,35 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Password wajib diisi';
     }
     
-    // Jika tidak ada error, proses login
+    // Jika tidak ada error, simulasi login berhasil
     if (empty($errors)) {
-        try {
-            $query = "SELECT * FROM users WHERE username = :username OR email = :email";
-            $stmt = $conn->prepare($query);
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':email', $username); // Bisa login dengan email atau username
-            $stmt->execute();
-            
-            $user = $stmt->fetch();
-            
-            if ($user && password_verify($password, $user['password'])) {
-                // Login berhasil
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
-                
-                // Redirect ke halaman utama atau dashboard
-                if ($user['role'] === 'admin') {
-                    redirect('admin/dashboard.php');
-                } else {
-                    redirect('index.php');
-                }
-            } else {
-                $errors[] = 'Username/Email atau Password tidak valid';
-            }
-        } catch(PDOException $e) {
-            $errors[] = 'Terjadi kesalahan: ' . $e->getMessage();
-        }
+        // Untuk demo, kita anggap login selalu berhasil
+        $_SESSION['logged_in'] = true;
+        $_SESSION['username'] = $username;
+        
+        // Redirect ke halaman utama
+        header('Location: index.php');
+        exit;
     }
 }
 ?>

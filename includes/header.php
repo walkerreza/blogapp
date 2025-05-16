@@ -11,16 +11,13 @@
         </ul>
     </nav>
     <div class="user-menu">
-        <?php if(isset($_SESSION['user_id'])): ?>
+        <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
             <div class="dropdown">
                 <button class="dropdown-btn">
                     <i class="fas fa-user-circle"></i> 
-                    <?php echo $_SESSION['username']; ?>
+                    <?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Pengguna'; ?>
                 </button>
                 <div class="dropdown-content">
-                    <?php if($_SESSION['role'] === 'admin'): ?>
-                        <a href="admin/dashboard.php">Dashboard</a>
-                    <?php endif; ?>
                     <a href="profile.php">Profil</a>
                     <a href="my-articles.php">Artikel Saya</a>
                     <a href="logout.php">Keluar</a>

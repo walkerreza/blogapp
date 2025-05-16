@@ -1,0 +1,15 @@
+Untuk gambar artikel, Anda bisa menggunakan layanan placeholder online seperti:
+
+1. https://picsum.photos/800/400 - Untuk gambar acak dengan ukuran 800x400
+2. https://via.placeholder.com/800x400 - Untuk placeholder dengan ukuran 800x400
+
+Atau Anda bisa menggunakan gambar lokal dengan menyimpannya di folder ini.
+
+Nama file yang digunakan dalam kode:
+- article1.jpg
+- article2.jpg
+- article3.jpg
+- article4.jpg
+- article5.jpg
+- hero-bg.jpg
+- avatar.jpg
